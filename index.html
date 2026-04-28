@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chandler Matere Simiyu — Full Stack Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Instrument+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f2eb; --surface: #edeae2; --card: #ffffff;
+      --ink: #111210; --ink2: #555550; --ink3: #999990;
+      --accent: #d4522a; --accent2: #2a6dd4;
+      --border: rgba(17,18,16,0.1); --border2: rgba(17,18,16,0.06);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Instrument Sans', sans-serif; font-weight: 300; line-height: 1.7; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 4rem;
+      background: rgba(245,242,235,0.92); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--ink2); text-decoration: none; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+
+    .hero {
+      min-height: 100vh; padding: 9rem 4rem 5rem;
+      display: grid; grid-template-columns: 1fr 360px; gap: 4rem; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute; bottom: -1rem; right: -1rem;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(6rem, 13vw, 13rem); color: transparent;
+      -webkit-text-stroke: 1px rgba(17,18,16,0.06); pointer-events: none; user-select: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(212,82,42,0.3);
+      padding: 0.35rem 0.8rem; border-radius: 2px; margin-bottom: 2rem;
+    }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2.8rem, 5.5vw, 5.5rem); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+    h1 .accent { color: var(--accent); }
+    .hero-sub { font-size: 1rem; color: var(--ink2); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.85; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-solid { background: var(--ink); color: var(--bg); padding: 0.85rem 2rem; text-decoration: none; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; border-radius: 3px; transition: background 0.2s; }
+    .btn-solid:hover { background: var(--accent); }
+    .btn-outline { border: 1px solid var(--border); color: var(--ink); padding: 0.85rem 2rem; text-decoration: none; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; border-radius: 3px; transition: border-color 0.2s; }
+    .btn-outline:hover { border-color: var(--ink2); }
+
+    .journey-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.75rem; position: relative; z-index: 2; }
+    .journey-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1.25rem; }
+    .cert-row { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border2); }
+    .cert-row:last-of-type { border-bottom: none; }
+    .cert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .cert-dot.active { background: var(--accent); animation: blink 2s infinite; }
+    .cert-dot.pending { background: transparent; border: 1.5px solid var(--ink3); }
+    .cert-info { flex: 1; }
+    .cert-title { font-size: 0.8rem; font-weight: 500; color: var(--ink); line-height: 1.3; }
+    .cert-sub { font-size: 0.68rem; color: var(--ink3); font-family: 'JetBrains Mono', monospace; }
+    .cert-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; padding: 0.15rem 0.45rem; border-radius: 2px; flex-shrink: 0; }
+    .cert-badge.wip { background: rgba(212,82,42,0.1); color: var(--accent); }
+    .cert-badge.soon { background: var(--surface); color: var(--ink3); }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0 4rem; }
+    section { padding: 6rem 4rem; }
+    .sec-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.75rem; }
+    h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 3.5vw, 3rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.25rem; }
+
+    /* SKILLS */
+    #skills { background: var(--ink); color: var(--bg); }
+    #skills .sec-eyebrow { color: rgba(245,242,235,0.35); }
+    #skills h2 { color: var(--bg); }
+    .skills-intro { color: rgba(245,242,235,0.5); max-width: 520px; margin-bottom: 3.5rem; font-size: 0.95rem; }
+    .tracks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1px; background: rgba(245,242,235,0.07); border: 1px solid rgba(245,242,235,0.07); border-radius: 8px; overflow: hidden; }
+    .track { background: var(--ink); padding: 2rem; transition: background 0.2s; }
+    .track:hover { background: #1a1c18; }
+    .track-num { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: rgba(245,242,235,0.25); margin-bottom: 1rem; letter-spacing: 0.1em; }
+    .track-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--bg); margin-bottom: 0.5rem; line-height: 1.3; }
+    .track-desc { font-size: 0.78rem; color: rgba(245,242,235,0.42); line-height: 1.7; margin-bottom: 1rem; }
+    .track-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .pill { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.18rem 0.5rem; border: 1px solid rgba(245,242,235,0.13); border-radius: 2px; color: rgba(245,242,235,0.45); }
+    .pill.hot { border-color: rgba(212,82,42,0.45); color: var(--accent); }
+    .track-status { margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; }
+    .track-status.active { color: var(--accent); }
+    .track-status.upcoming { color: rgba(245,242,235,0.25); }
+
+    /* PROJECTS */
+    #projects { background: var(--bg); }
+    .projects-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+    .filter-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .filter-tab { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 0.32rem 0.85rem; border: 1px solid var(--border); border-radius: 2px; background: none; cursor: pointer; color: var(--ink2); letter-spacing: 0.05em; transition: all 0.15s; }
+    .filter-tab:hover, .filter-tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.2rem; }
+    .proj-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.8rem; transition: box-shadow 0.2s, transform 0.2s; }
+    .proj-card:not(.placeholder):hover { box-shadow: 0 8px 32px rgba(17,18,16,0.08); transform: translateY(-3px); }
+    .proj-card.placeholder { opacity: 0.48; }
+    .proj-track-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.18rem 0.5rem; border-radius: 2px; display: inline-block; width: fit-content; }
+    .label-web { background: rgba(42,109,212,0.1); color: var(--accent2); }
+    .label-js { background: rgba(161,98,7,0.1); color: #92580a; }
+    .label-python { background: rgba(21,128,61,0.1); color: #15803d; }
+    .label-react { background: rgba(67,56,202,0.1); color: #4338ca; }
+    .label-backend { background: rgba(212,82,42,0.1); color: var(--accent); }
+    .proj-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; line-height: 1.25; color: var(--ink); }
+    .proj-desc { font-size: 0.8rem; color: var(--ink2); line-height: 1.7; flex: 1; }
+    .proj-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.8rem; border-top: 1px solid var(--border2); flex-wrap: wrap; gap: 0.4rem; }
+    .proj-techs { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .tech-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; padding: 0.12rem 0.42rem; background: var(--surface); border-radius: 2px; color: var(--ink2); }
+    .proj-link { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent2); text-decoration: none; }
+    .proj-link:hover { text-decoration: underline; }
+    .wip-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; padding: 0.12rem 0.45rem; background: rgba(212,82,42,0.07); color: var(--accent); border-radius: 2px; border: 1px dashed rgba(212,82,42,0.28); }
+
+    /* ABOUT */
+    #about { background: var(--surface); }
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
+    .about-body p { color: var(--ink2); margin-bottom: 1.2rem; line-height: 1.85; font-size: 0.95rem; }
+    .about-body strong { color: var(--ink); font-weight: 500; }
+    .platform-cards { display: flex; flex-direction: column; gap: 0.85rem; }
+    .platform-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--ink); transition: border-color 0.2s, transform 0.15s; }
+    .platform-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .platform-icon-box { width: 38px; height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; background: var(--surface); }
+    .platform-card-info { flex: 1; }
+    .platform-card-name { font-weight: 500; font-size: 0.88rem; margin-bottom: 0.12rem; }
+    .platform-card-sub { font-size: 0.7rem; color: var(--ink3); font-family: 'JetBrains Mono', monospace; }
+    .platform-card-arrow { color: var(--ink3); font-size: 0.85rem; }
+    .avail-banner { margin-top: 1.25rem; background: var(--ink); border-radius: 8px; padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1rem; }
+    .avail-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; flex-shrink: 0; animation: blink 2s infinite; }
+    .avail-text { font-size: 0.82rem; color: rgba(245,242,235,0.65); }
+    .avail-text strong { color: var(--bg); font-weight: 500; }
+
+    /* CONTACT */
+    #contact { background: var(--ink); color: var(--bg); text-align: center; }
+    #contact .sec-eyebrow { color: rgba(245,242,235,0.3); }
+    #contact h2 { color: var(--bg); }
+    .contact-sub { color: rgba(245,242,235,0.45); font-size: 0.95rem; max-width: 420px; margin: 0 auto 2.5rem; }
+    .contact-email { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.4rem, 3.5vw, 2.8rem); letter-spacing: -0.02em; color: var(--bg); text-decoration: none; display: inline-block; margin-bottom: 3rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.2rem; transition: color 0.2s; }
+    .contact-email:hover { color: var(--accent); }
+    .social-row { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .social-link { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(245,242,235,0.35); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+    .social-link:hover { color: var(--bg); }
+
+    footer { background: var(--ink); border-top: 1px solid rgba(245,242,235,0.06); padding: 1.5rem 4rem; display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(245,242,235,0.22); letter-spacing: 0.06em; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+      .hero-bg-text, .journey-card { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .divider { margin: 0 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Chandler<span> </span>Matere</div>
+  <ul class="nav-links">
+    <li><a href="#skills">stack</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#about">about</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div>
+    <div class="hero-tag">Open to freelance work</div>
+    <h1>Full Stack<br/><span class="accent">Developer</span><br/>in progress.</h1>
+    <p class="hero-sub">Building the complete web stack — from responsive interfaces to databases and APIs. Working through the FreeCodeCamp Full Stack curriculum and adding real projects to GitHub as I go.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-solid">See my projects →</a>
+      <a href="https://upwork.com" target="_blank" class="btn-outline">Hire me on Upwork</a>
+    </div>
+  </div>
+
+  <div class="journey-card">
+    <div class="journey-label">// certification journey</div>
+    <div class="cert-row">
+      <div class="cert-dot active"></div>
+      <div class="cert-info"><div class="cert-title">Responsive Web Design</div><div class="cert-sub">HTML · CSS · Accessibility</div></div>
+      <span class="cert-badge wip">active</span>
+    </div>
+    <div class="cert-row">
+      <div class="cert-dot pending"></div>
+      <div class="cert-info"><div class="cert-title">JavaScript Algorithms</div><div class="cert-sub">JS · Data Structures</div></div>
+      <span class="cert-badge soon">upcoming</span>
+    </div>
+    <div class="cert-row">
+      <div class="cert-dot pending"></div>
+      <div class="cert-info"><div class="cert-title">Front End Libraries</div><div class="cert-sub">React · Redux · Bootstrap</div></div>
+      <span class="cert-badge soon">upcoming</span>
+    </div>
+    <div class="cert-row">
+      <div class="cert-dot pending"></div>
+      <div class="cert-info"><div class="cert-title">Back End &amp; APIs</div><div class="cert-sub">Node.js · Express · MongoDB</div></div>
+      <span class="cert-badge soon">upcoming</span>
+    </div>
+    <div class="cert-row">
+      <div class="cert-dot pending"></div>
+      <div class="cert-info"><div class="cert-title">Relational Databases</div><div class="cert-sub">PostgreSQL · SQL · Bash</div></div>
+      <span class="cert-badge soon">upcoming</span>
+    </div>
+    <div class="cert-row">
+      <div class="cert-dot pending"></div>
+      <div class="cert-info"><div class="cert-title">Scientific Computing (Python)</div><div class="cert-sub">Python · OOP · Algorithms</div></div>
+      <span class="cert-badge soon">upcoming</span>
+    </div>
+  </div>
+
+  <div class="hero-bg-text">DEV</div>
+</section>
+
+<hr class="divider" />
+
+<section id="skills">
+  <div class="sec-eyebrow">What I'm building with</div>
+  <h2>My Stack</h2>
+  <p class="skills-intro">Six certification tracks covering the complete web stack — from pixel-perfect interfaces to databases, APIs, and Python automation.</p>
+  <div class="tracks-grid">
+    <div class="track">
+      <div class="track-num">01 / 06</div>
+      <div class="track-name">Responsive Web Design</div>
+      <div class="track-desc">Layouts that work on any screen. Semantic HTML, modern CSS, and accessible design principles.</div>
+      <div class="track-pills"><span class="pill hot">HTML5</span><span class="pill hot">CSS3</span><span class="pill">Flexbox</span><span class="pill">CSS Grid</span><span class="pill">Accessibility</span></div>
+      <div class="track-status active">● In Progress</div>
+    </div>
+    <div class="track">
+      <div class="track-num">02 / 06</div>
+      <div class="track-name">JavaScript Algorithms</div>
+      <div class="track-desc">Core programming logic, data structures, and algorithm problem solving in vanilla JS.</div>
+      <div class="track-pills"><span class="pill hot">JavaScript</span><span class="pill">ES6+</span><span class="pill">Data Structures</span><span class="pill">Algorithms</span></div>
+      <div class="track-status upcoming">○ Upcoming</div>
+    </div>
+    <div class="track">
+      <div class="track-num">03 / 06</div>
+      <div class="track-name">Front End Libraries</div>
+      <div class="track-desc">Component-based UIs with React — the most in-demand front-end skill in the market right now.</div>
+      <div class="track-pills"><span class="pill hot">React</span><span class="pill">Redux</span><span class="pill">Bootstrap</span><span class="pill">Sass</span></div>
+      <div class="track-status upcoming">○ Upcoming</div>
+    </div>
+    <div class="track">
+      <div class="track-num">04 / 06</div>
+      <div class="track-name">Back End &amp; APIs</div>
+      <div class="track-desc">Server-side logic, RESTful APIs, and database connections that power real applications.</div>
+      <div class="track-pills"><span class="pill hot">Node.js</span><span class="pill hot">Express</span><span class="pill">MongoDB</span><span class="pill">REST APIs</span></div>
+      <div class="track-status upcoming">○ Upcoming</div>
+    </div>
+    <div class="track">
+      <div class="track-num">05 / 06</div>
+      <div class="track-name">Relational Databases</div>
+      <div class="track-desc">Structured data, complex queries, and database design using SQL and PostgreSQL.</div>
+      <div class="track-pills"><span class="pill hot">PostgreSQL</span><span class="pill">SQL</span><span class="pill">Bash</span><span class="pill">Linux</span></div>
+      <div class="track-status upcoming">○ Upcoming</div>
+    </div>
+    <div class="track">
+      <div class="track-num">06 / 06</div>
+      <div class="track-name">Python &amp; Automation</div>
+      <div class="track-desc">Scientific computing, OOP, and automation scripting — a powerful complement to web work.</div>
+      <div class="track-pills"><span class="pill hot">Python</span><span class="pill">OOP</span><span class="pill">Algorithms</span><span class="pill">Automation</span></div>
+      <div class="track-status upcoming">○ Upcoming</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<section id="projects">
+  <div class="projects-header">
+    <div>
+      <div class="sec-eyebrow">What I've built</div>
+      <h2>Projects</h2>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterProjects('all',this)">All</button>
+      <button class="filter-tab" onclick="filterProjects('web',this)">Web Design</button>
+      <button class="filter-tab" onclick="filterProjects('js',this)">JavaScript</button>
+      <button class="filter-tab" onclick="filterProjects('python',this)">Python</button>
+      <button class="filter-tab" onclick="filterProjects('react',this)">React</button>
+      <button class="filter-tab" onclick="filterProjects('backend',this)">Back End</button>
+    </div>
+  </div>
+  <div class="projects-grid" id="projects-grid">
+
+    <div class="proj-card placeholder" data-track="web">
+      <span class="proj-track-label label-web">Responsive Web Design</span>
+      <div class="proj-title">Survey Form</div>
+      <p class="proj-desc">A responsive survey form with proper accessibility, labels, and HTML5 validation — clean, structured, and mobile-friendly.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card" data-track="web">
+      <span class="proj-track-label label-web">Responsive Web Design</span>
+      <div class="proj-title">Tribute Page</div>
+      <p class="proj-desc">A tribute page for a historical figure with responsive image, semantic markup, and clean typographic layout.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span></div><a href="https://simiyuu.github.io/tribute-page/" target="_blank" class="proj-link">Live →</a><a href="https://github.com/Simiyuu/tribute-page" target="_blank" class="proj-link">GitHub →</a></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="web">
+      <span class="proj-track-label label-web">Responsive Web Design</span>
+      <div class="proj-title">Technical Documentation Page</div>
+      <p class="proj-desc">A multi-section documentation page with fixed sidebar navigation and fully responsive layout.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">CSS Grid</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="web">
+      <span class="proj-track-label label-web">Responsive Web Design</span>
+      <div class="proj-title">Product Landing Page</div>
+      <p class="proj-desc">A responsive product landing page — hero, features, pricing, and a contact form. A template clients regularly request on Fiverr.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">Flexbox</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="js">
+      <span class="proj-track-label label-js">JavaScript</span>
+      <div class="proj-title">Palindrome Checker</div>
+      <p class="proj-desc">Checks whether a given string is a palindrome — handling punctuation, spaces, and case sensitivity with JS logic.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">JavaScript</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="js">
+      <span class="proj-track-label label-js">JavaScript</span>
+      <div class="proj-title">Roman Numeral Converter</div>
+      <p class="proj-desc">Converts any number to its Roman numeral representation using JavaScript string and number logic.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">JavaScript</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="js">
+      <span class="proj-track-label label-js">JavaScript</span>
+      <div class="proj-title">Cash Register</div>
+      <p class="proj-desc">Calculates change due and determines whether a cash register has enough change — a classic algorithm project.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">JavaScript</span><span class="tech-tag">Algorithms</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="python">
+      <span class="proj-track-label label-python">Python</span>
+      <div class="proj-title">Arithmetic Formatter</div>
+      <p class="proj-desc">Formats arithmetic problems vertically and side-by-side. Demonstrates string manipulation and conditional logic in Python.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">Python</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="python">
+      <span class="proj-track-label label-python">Python</span>
+      <div class="proj-title">Budget App</div>
+      <p class="proj-desc">OOP-based budget tracker with categories, deposits, withdrawals, transfers, and a spending chart output.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">Python</span><span class="tech-tag">OOP</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="python">
+      <span class="proj-track-label label-python">Python</span>
+      <div class="proj-title">Probability Calculator</div>
+      <p class="proj-desc">Monte Carlo simulation to determine the probability of drawing certain ball combinations from a hat.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">Python</span><span class="tech-tag">Simulation</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="react">
+      <span class="proj-track-label label-react">React</span>
+      <div class="proj-title">Random Quote Machine</div>
+      <p class="proj-desc">Fetches and displays random quotes from an API with a tweet button and animated transitions between quotes.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">React</span><span class="tech-tag">API</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="react">
+      <span class="proj-track-label label-react">React</span>
+      <div class="proj-title">Markdown Previewer</div>
+      <p class="proj-desc">Real-time Markdown editor and previewer — type on the left, see formatted HTML output on the right, live.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">React</span><span class="tech-tag">Marked.js</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="backend">
+      <span class="proj-track-label label-backend">Back End &amp; APIs</span>
+      <div class="proj-title">Timestamp Microservice</div>
+      <p class="proj-desc">A Node.js/Express API that parses natural language dates and returns structured Unix and UTC timestamps.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">Node.js</span><span class="tech-tag">Express</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+    <div class="proj-card placeholder" data-track="backend">
+      <span class="proj-track-label label-backend">Back End &amp; APIs</span>
+      <div class="proj-title">URL Shortener Microservice</div>
+      <p class="proj-desc">POST a URL and receive a short code. Visiting the code redirects to the original URL — backed by MongoDB.</p>
+      <div class="proj-footer"><div class="proj-techs"><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span></div><span class="wip-badge">coming soon</span></div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<section id="about">
+  <div class="about-grid">
+    <div class="about-body">
+      <div class="sec-eyebrow">Who I am</div>
+      <h2>About Me</h2>
+      <p>I'm a <strong>self-taught developer based in Nairobi, Kenya</strong>, working through the complete FreeCodeCamp Full Stack curriculum. My goal is to build real, useful software — and land my first freelance clients through Upwork and Fiverr in the process.</p>
+      <p>The curriculum covers six tracks: Responsive Web Design, JavaScript Algorithms, Front-End Libraries (React), Back-End Development and APIs, Relational Databases, and Scientific Computing with Python. Every project in this portfolio comes from that curriculum — real working code, pushed to GitHub.</p>
+      <p>I'm currently available for <strong>small to medium freelance projects</strong> — particularly landing pages, Python automation scripts, web app components, and data tasks. I work remotely and communicate clearly throughout every project.</p>
+      <p>I believe the best way to grow as a developer is to build things for real people. If you have a project in mind, I'd love to hear about it.</p>
+    </div>
+    <div>
+      <div class="sec-eyebrow" style="margin-bottom:1rem;">Find me on</div>
+      <div class="platform-cards">
+        <a href="https://upwork.com" target="_blank" class="platform-card">
+          <div class="platform-icon-box">💼</div>
+          <div class="platform-card-info"><div class="platform-card-name">Upwork</div><div class="platform-card-sub">upwork.com/fl/yourusername</div></div>
+          <span class="platform-card-arrow">→</span>
+        </a>
+        <a href="https://fiverr.com" target="_blank" class="platform-card">
+          <div class="platform-icon-box">🎯</div>
+          <div class="platform-card-info"><div class="platform-card-name">Fiverr</div><div class="platform-card-sub">fiverr.com/yourusername</div></div>
+          <span class="platform-card-arrow">→</span>
+        </a>
+        <a href="https://github.com" target="_blank" class="platform-card">
+          <div class="platform-icon-box">🐙</div>
+          <div class="platform-card-info"><div class="platform-card-name">GitHub</div><div class="platform-card-sub">https://github.com/Simiyuu</div></div>
+          <span class="platform-card-arrow">→</span>
+        </a>
+        <a href="https://freecodecamp.org" target="_blank" class="platform-card">
+          <div class="platform-icon-box">🎓</div>
+          <div class="platform-card-info"><div class="platform-card-name">FreeCodeCamp</div><div class="platform-card-sub">Full Stack Curriculum · In Progress</div></div>
+          <span class="platform-card-arrow">→</span>
+        </a>
+      </div>
+      <div class="avail-banner">
+        <div class="avail-dot"></div>
+        <div class="avail-text"><strong>Currently available</strong> for freelance work — landing pages, Python scripts, web apps, and data tasks.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="sec-eyebrow">Get in touch</div>
+  <h2>Let's work together</h2>
+  <p class="contact-sub">Have a project in mind? Whether it's a landing page, a Python script, or a full web app — I'd love to hear about it.</p>
+  <a href="mailto:your@email.com" class="contact-email">chandlermxtere@gmail.com</a>
+  <div class="social-row">
+    <a href="https://upwork.com" class="social-link" target="_blank">Upwork</a>
+    <a href="https://fiverr.com" class="social-link" target="_blank">Fiverr</a>
+    <a href="https://github.com" class="social-link" target="_blank">GitHub</a>
+    <a href="https://linkedin.com" class="social-link" target="_blank">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <span>YOUR NAME · FULL STACK DEVELOPER · NAIROBI, KENYA</span>
+  <span>BUILT WITH HTML &amp; CSS</span>
+</footer>
+
+<script>
+  function filterProjects(track, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.proj-card').forEach(card => {
+      card.style.display = (track === 'all' || card.dataset.track === track) ? 'flex' : 'none';
+    });
+  }
+</script>
+</body>
+</html>
