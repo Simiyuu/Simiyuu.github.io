@@ -20,8 +20,8 @@ certification and add new projects.
 
 | Project | Tech | Status |
 |---|---|---|
-| Charlie Kirk Tribute Page | HTML, CSS | ✅ Live |
-| Survey Form | HTML, CSS | 🔄 Coming Soon |
+| Charlie Kirk Tribute Page | HTML, CSS | Charlie Kirk Tribute Page | HTML, CSS | ✅ [Live](https://Simiyuu.github.io/tribute-page) · [GitHub](https://github.com/Simiyuu/tribute-page) |
+| Survey Form | HTML, CSS | Survey Form | HTML, CSS | ✅ [Live](https://Simiyuu.github.io/survey-form) |
 | Technical Documentation Page | HTML, CSS | 🔄 Coming Soon |
 | Product Landing Page | HTML, CSS | 🔄 Coming Soon |
 | JavaScript Projects | JavaScript | 🔄 Coming Soon |
