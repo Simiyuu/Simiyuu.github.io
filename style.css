@@ -435,6 +435,7 @@ h2 {
 .label-python { background: rgba(21,128,61,0.1); color: #15803d; }
 .label-react { background: rgba(67,56,202,0.1); color: #4338ca; }
 .label-backend { background: rgba(212,82,42,0.1); color: var(--accent); }
+.label-php {background: rba(139,92,246,0.1); color: #7c3aed; }
  
 .proj-title {
   font-family: 'Syne', sans-serif;
