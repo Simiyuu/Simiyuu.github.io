@@ -32,6 +32,7 @@ project and certification.
 | Back End Projects | Node.js, Express | Coming Soon |
 | Laravel CRUD App | PHP, Laravel | In Progress |
 | Laravel Blog | PHP, Laravel | Coming Soon |
+| Jumia Price Scraper | Python, BeautifulSoup | Coming Soon |
 
 ## Certifications In Progress
 
